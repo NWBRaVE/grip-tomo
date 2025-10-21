@@ -1,31 +1,32 @@
-# GRIP-Tomo: GRaph Identification of Proteins in Tomograms
+# GRIP-Tomo 2.0
 
-[![DOI](https://zenodo.org/badge/542728266.svg)](https://doi.org/10.5281/zenodo.17127841)
+Updated tooling for the GRIP-Tomo pipeline: convert cryo-ET subtomograms into graphs, extract features, and train machine-learning classifiers. 
 
-[![Documentation Status](https://readthedocs.org/projects/grip-tomo/badge/?version=latest)](https://grip-tomo.readthedocs.io/en/latest/?badge=latest)
+> **Note:** This is research software under active development. The software, interfaces, and workflow may change.
 
+## Quick Start
+- Clone and enter the repo: `git clone git@github.com:EMSL-Computing/grip-tomo.git && cd griptomo`
+- Create an isolated environment with uv: `uv venv` (creates `.venv/`)
+- Activate the environment: `source .venv/bin/activate`
+- Install the package with the extras that fit your hardware:
+	- CPU-only baseline: `uv pip install .`
+	- Parsl workflow support: `uv pip install .[parsl]`
+	- GPU (RAPIDS) stack: `uv pip install .[gpu-cu11]` or `uv pip install .[gpu-cu12]`
+	- Editable mode for active development: `uv pip install -e ."[dev]"`
+- Run smoke tests when ready: `uv run pytest -q tests/test_core.py`
 
-A pipeline to help identify and classify structures in tomography data using global and local topological (network) features. 
+## Docs & Tutorials
+- API docs (`pdoc`): `docs/api/index.html`
+- Subtomogram simulation quickstart: `docs/cistem_subtomogram_simulation_quickstart.md`
+- Tutorial notebook (view in VS Code/Jupyter): `docs/tutorial_notebook/tutorial.ipynb`
+- Parsl on HPC quickstart: `docs/parsl_hpc_quickstart.md`
 
-The package consists of 3 core modules: 
-1. `pdb2graph.py` - converts a PDB structure into a graph network. 
-2. `density2graph.py` - converts a 3D density to a graph. 
-3. `graph2class.py` - measures graph features and classifies
-
-[Documentation](https://grip-tomo.readthedocs.io/en/latest/)
-
----
-
-### Quickstart guide:
-
-0. **open terminal / command prompt**
-1. **clone the repository:** `git clone https://github.com/EMSL-Computing/grip-tomo`
-2. **install the dependencies:** `pip install -r /path/to/requirements.txt`  
-3. **run tests:** `cd path/to/grip_tomo/` then `python _test_basic.py`
-4. **review example notebook, `grip_tomo/example_notebook.ipynb`**
-    - To interact with `.ipynb` files install Jupyter-lab
-
----
+## Contributing
+- Open an issue or discuss the plan before large changes.
+- Fork the repo, create a feature branch, and keep commits focused.
+- Document new functionality and add tests; run `uv run pytest` before submitting.
+- Regenerate docs when APIs change: `uv run pdoc griptomo --docformat numpy --output-directory docs/api`.
+- Submit a merge request describing the change and verification steps.
 
 ### Citation
 Please cite our publication and accompanying software if you use it:
@@ -38,7 +39,4 @@ Please cite our publication and accompanying software if you use it:
 ---
 
 See the included license and disclaimer files
-
-August George, PNNL, 2022
-
 

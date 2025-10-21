@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "griptomo"
+version = "2.0.0"
+description = "GRaph Identification of Proteins in TOMOgrams."
+authors = [
+    { name = "August George", email = "august.george@pnnl.gov" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy==1.26.4",
+    "pandas==2.2.2",
+    "networkx==3.3",
+    "mrcfile==1.5.3",
+    "biopython==1.84",
+    "scipy==1.14.0",
+    "matplotlib==3.9.2",
+    "scikit-learn==1.5.1",
+    "igraph==0.11.6",
+    "hdbscan==0.8.39"
+]
+[project.optional-dependencies]
+parsl = ["parsl==2024.9.16",
+         "sqlalchemy==2.0.37"]
+
+dev = [
+    "pytest==8.3.2",
+    "pdoc==15.0.0",
+]
+
+# pip config set global.extra-index-url https://pypi.nvidia.com
+gpu-cu12 = [
+    "cudf-cu12==25.2.* ; platform_system == 'Linux' and platform_machine == 'x86_64'",
+    "cuml-cu12==25.2.* ; platform_system == 'Linux' and platform_machine == 'x86_64'",
+    "cugraph-cu12==25.2.* ; platform_system == 'Linux' and platform_machine == 'x86_64'",
+]
+
+gpu-cu11 = [
+    "cudf-cu11==25.2.* ; platform_system == 'Linux' and platform_machine == 'x86_64'",
+    "cuml-cu11==25.2.* ; platform_system == 'Linux' and platform_machine == 'x86_64'",
+    "cugraph-cu11==25.2.* ; platform_system == 'Linux' and platform_machine == 'x86_64'",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["griptomo*"]
+
