@@ -5,7 +5,7 @@ Updated tooling for the GRIP-Tomo pipeline: convert cryo-ET subtomograms into gr
 > **Note:** This is research software under active development. The software, interfaces, and workflow may change.
 
 ## Quick Start
-- Clone and enter the repo: `git clone git@github.com:EMSL-Computing/grip-tomo.git && cd griptomo`
+- Clone and enter the repo: `git clone git@github.com:EMSL-Computing/grip-tomo.git && cd grip-tomo`
 - Create an isolated environment with uv: `uv venv` (creates `.venv/`)
 - Activate the environment: `source .venv/bin/activate`
 - Install the package with the extras that fit your hardware:
