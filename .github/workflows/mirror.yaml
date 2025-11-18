@@ -21,6 +21,7 @@ jobs:
           MIRROR_SSH_KEY: ${{ secrets.MIRROR_SSH_KEY }}
         run: |
           set -euo pipefail
+          if [ -z "$MIRROR_SSH_KEY" ]; then echo "Error: MIRROR_SSH_KEY secret is not set"; exit 1; fi
           mkdir -p ~/.ssh
           printf '%s\n' "$MIRROR_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
