@@ -20,8 +20,12 @@ jobs:
           MIRROR_SSH_KEY: ${{ secrets.MIRROR_SSH_KEY }}
         run: |
           set -euo pipefail
+          if [ -z "$MIRROR_SSH_KEY" ]; then
+            echo "Error: MIRROR_SSH_KEY secret is not set"
+            exit 1
+          fi
           mkdir -p ~/.ssh
-          echo "$MIRROR_SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$MIRROR_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
 
@@ -49,7 +53,10 @@ jobs:
           git remote add dest git@github.com:NWBRaVE/grip-tomo.git
 
           echo "Pushing mirror to destination..."
-          git push --mirror dest
+          # Push all branches and tags, but exclude internal GitHub refs
+          # like refs/pull/* to avoid "deny updating a hidden ref" errors
+          git push dest 'refs/heads/*:refs/heads/*' \
+            'refs/tags/*:refs/tags/*' --prune
 
           echo "Mirror completed successfully!"
 
