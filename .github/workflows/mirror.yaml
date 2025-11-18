@@ -32,9 +32,7 @@ jobs:
       - name: Mirror branches and tags
         run: |
           set -euo pipefail
-          git init --bare repo.git
+          git clone --mirror https://github.com/EMSL-Computing/grip-tomo.git repo.git
           cd repo.git
-          git remote add upstream https://github.com/EMSL-Computing/grip-tomo.git
-          git fetch --prune upstream '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
           git remote add dest git@github.com:NWBRaVE/grip-tomo.git
           git push --mirror dest
