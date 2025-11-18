@@ -37,4 +37,4 @@ jobs:
           cd repo.git
           git remote add dest git@github.com:NWBRaVE/grip-tomo.git
           # Push all branches and tags, but exclude internal GitHub refs like refs/pull/*
-          git push dest 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' --prune
+          git push dest 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' --prune --force
