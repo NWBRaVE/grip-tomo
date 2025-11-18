@@ -1,0 +1,39 @@
+name: Mirror to NWBRaVE
+on:
+  push:
+    branches: ["**"]
+    tags: ["**"]
+  delete:
+    branches: ["**"]
+    tags: ["**"]
+  workflow_dispatch:
+
+concurrency:
+  group: mirror
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH for pushing to NWBRaVE
+        env:
+          MIRROR_SSH_KEY: ${{ secrets.MIRROR_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "$MIRROR_SSH_KEY" ]; then echo "Error: MIRROR_SSH_KEY secret is not set"; exit 1; fi
+          mkdir -p ~/.ssh
+          (umask 077; printf '%s\n' "$MIRROR_SSH_KEY" > ~/.ssh/id_ed25519)
+          # Add official GitHub SSH host keys to known_hosts (see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
+          echo "|1|f8sELpAo0P5NdVs4KJIp4jOSAmI=|nX+ZspGDZCBoBPXaGNsq4CPGK/c= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE2fW4vFf8gDuwZQ+Q0jrISFRCGDpa2BkL4Z1p1g6U5R" >> ~/.ssh/known_hosts
+          echo "|1|N2vCuxnxOQk4LLx7sMMEZe2qTfA=|kFGr2PzefDs2fzGEylh4G6dkcnQ= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA4O0s8AjtKoaVHgMHqmpYyqn1bVbWcv16O3Qe9n3VWeItPxX2VINeodIZ6Tn6PvxI6Bfq5lHppZArYrusS4x+h0/pk3jfbQ3VIAtF+wNCz7L+G2kZZgwyU0vbzUKGwEuITdSb9VjA36TObgGJE0E7E5Wdl66iRS0LlwM651c01qmPvvrLpzjAU6RzGmmKzBSSo+d5QwDFi1Cdm42Hcps225y7sY9qsK0kGugHgdGXcwKYBJ38qJNmPR9U1FVLtZLkNVr7DiIP9N6byN1Nsx3Rp3XIan+FJxuxMxDPZWS9Vyuk3F7S3w7Dnk3a1JpN96CBvs1+FiSVqSdz+CA0nVddOQ==" >> ~/.ssh/known_hosts
+          echo "|1|l5vVsQt1zArhcXd1LSeX776BF3M=|sxuKOSeaMDAnbcW2CYwiVdc+GqY= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBE7DhZZrVSu2Ce279b9Ec/WWEDuJeayQMZT6ZX0hgqP/d9vywgq6Z9erjRzCQXDpUe1koRaSPoaqe7iT730GgxY=" >> ~/.ssh/known_hosts
+
+      - name: Mirror branches and tags
+        run: |
+          set -euo pipefail
+          git clone --mirror https://github.com/EMSL-Computing/grip-tomo.git repo.git
+          cd repo.git
+          git remote add dest git@github.com:NWBRaVE/grip-tomo.git
+          # Push all branches and tags, but exclude internal GitHub refs like refs/pull/*
+          git push dest 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' --prune --force
