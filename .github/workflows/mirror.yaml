@@ -1,5 +1,6 @@
+---
 name: Mirror to NWBRaVE
-on:
+'on':
   push:
     branches: ["**"]
     tags: ["**"]
@@ -27,9 +28,32 @@ jobs:
       - name: Mirror branches and tags
         run: |
           set -euo pipefail
+
+          echo "Initializing bare repository for mirroring..."
           git init --bare repo.git
           cd repo.git
-          git remote add upstream https://github.com/EMSL-Computing/grip-tomo.git
-          git fetch --prune upstream '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+
+          echo "Configuring git..."
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          echo "Adding upstream remote..."
+          git remote add upstream \
+            https://github.com/EMSL-Computing/grip-tomo.git
+
+          echo "Fetching all refs from upstream..."
+          git fetch --prune upstream \
+            '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+
+          echo "Adding destination remote..."
           git remote add dest git@github.com:NWBRaVE/grip-tomo.git
+
+          echo "Pushing mirror to destination..."
           git push --mirror dest
+
+          echo "Mirror completed successfully!"
+
+      - name: Cleanup SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/id_ed25519
