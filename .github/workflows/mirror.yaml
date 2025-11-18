@@ -1,0 +1,35 @@
+name: Mirror to NWBRaVE
+on:
+  push:
+    branches: ["**"]
+    tags: ["**"]
+  delete:
+  workflow_dispatch:
+
+concurrency:
+  group: mirror
+  cancel-in-progress: true
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH for pushing to NWBRaVE
+        env:
+          MIRROR_SSH_KEY: ${{ secrets.MIRROR_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          echo "$MIRROR_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+
+      - name: Mirror branches and tags
+        run: |
+          set -euo pipefail
+          git init --bare repo.git
+          cd repo.git
+          git remote add upstream https://github.com/EMSL-Computing/grip-tomo.git
+          git fetch --prune upstream '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+          git remote add dest git@github.com:NWBRaVE/grip-tomo.git
+          git push --mirror dest
