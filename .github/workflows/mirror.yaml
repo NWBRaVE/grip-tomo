@@ -36,4 +36,5 @@ jobs:
           git clone --mirror https://github.com/EMSL-Computing/grip-tomo.git repo.git
           cd repo.git
           git remote add dest git@github.com:NWBRaVE/grip-tomo.git
-          git push --mirror dest
+          # Push all branches and tags, but exclude internal GitHub refs like refs/pull/*
+          git push dest 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' --prune
