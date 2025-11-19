@@ -33,6 +33,8 @@ Updated tooling for the GRIP-Tomo pipeline: convert cryo-ET subtomograms into gr
 ### Citation
 Please cite our publication and accompanying software if you use it:
 
+> Li, C., George, A., Neff, R., Kim, DN., Moser, T., Baldwin, K., Nelson, M., Firoozfar, A., Evans, JE., Cheung, MS. Graph Identification of Proteins in Tomograms (GRIP-Tomo) 2.0: Topologically Aware Classification for Proteins. arXiv. 2025; https://arxiv.org/abs/2510.22167
+
 > George, A, Kim, DN, Moser, T, Gildea, IT, Evans, JE, Cheung, MS. Graph identification of proteins in tomograms (GRIP-Tomo). Protein Science. 2023; 32( 1):e4538. https://doi.org/10.1002/pro.4538
 
 > George, A, Kim, DN, Moser, T, Gildea, IT, Evans, JE, Cheung, MS. EMSL-Computing/grip-tomo: Version 1.0. Zenodo; 2023. https://doi.org/10.5281/zenodo.17127842 
