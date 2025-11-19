@@ -29,6 +29,9 @@ parsl = ["parsl==2024.9.16",
 dev = [
     "pytest==8.3.2",
     "pdoc==15.0.0",
+    "tqdm==4.67.1",
+    "seaborn==0.13.2",
+    "jupyterlab==4.3.3",
 ]
 
 # pip config set global.extra-index-url https://pypi.nvidia.com

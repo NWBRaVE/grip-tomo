@@ -10,10 +10,12 @@ Updated tooling for the GRIP-Tomo pipeline: convert cryo-ET subtomograms into gr
 - Activate the environment: `source .venv/bin/activate`
 - Install the package with the extras that fit your hardware:
 	- CPU-only baseline: `uv pip install .`
-	- Parsl workflow support: `uv pip install .[parsl]`
-	- GPU (RAPIDS) stack: `uv pip install .[gpu-cu11]` or `uv pip install .[gpu-cu12]`
-	- Editable mode for active development: `uv pip install -e ."[dev]"`
-- Run smoke tests when ready: `uv run pytest -q tests/test_core.py`
+	- CPU with dev tools: `uv pip install -e ".[dev]"`
+	- Parsl workflow support: `uv pip install -e ".[dev,parsl]"`
+	- GPU stack (Linux x86_64 only): `uv pip install -e ".[dev,gpu-cu12]"`
+- Run smoke tests when ready: `pytest -q tests/test_core.py`
+
+> **Note:** GPU packages (cudf, cuML, cuGraph) are only available on Linux x86_64 with NVIDIA GPUs. The package works fine on macOS/other platforms without GPU support.
 
 ## Docs & Tutorials
 - API docs (`pdoc`): `docs/api/index.html`
