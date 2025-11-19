@@ -15,7 +15,16 @@ This guide walks through preparing, running, and post-processing cisTEM simulati
 - **Data**: a folder of input `.pdb` files and a conditions file patterned after `utils/try_these_conditions.txt`.
 
 ## 2. Environment Configuration
-1. Copy `.env.example` to `.env`, edit the required paths (`GRIPTOMO_OUTPUT_DIR`, executables such as `IMOD_CTFPHASEFLIP_BIN`, `IMOD_TILT`, `EMAN2_E2PROC2D`, `RELION_IMAGE_HANDLER`, cisTEM roots, etc.).
+The workflow relies on environment variables to locate external tools. A template is provided at `.env.example` in the repository root.
+
+1. Copy `.env.example` to `.env` and edit the required paths:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your system's paths for:
+   # - GRIPTOMO_OUTPUT_DIR (base output directory)
+   # - External tool binaries (IMOD_CTFPHASEFLIP_BIN, IMOD_TILT, EMAN2_E2PROC2D, etc.)
+   # - cisTEM installation paths
+   ```
 2. Source the file before running any helpers:
    ```bash
    source .env

@@ -712,10 +712,21 @@ class TestGripTomo(unittest.TestCase):
         )
         assert actual_mass == expected_mass
 
-    # TODO: Review unit test for d2g.identify_threshold_ratio
     def test_identify_threshold_ratio(self):
         """
         Tests whether threshold ratio is calculated as expected.
+
+        Note: This test validates the identify_threshold_ratio function which
+        performs a binary search to find the threshold value that produces a
+        target ratio of voxels above threshold. The test is marked for review
+        to ensure edge cases are properly covered (e.g., target ratio = 0.0 or 1.0,
+        uniform density data, etc.).
+
+        TODO: Add test cases for:
+        - Edge case: target_ratio = 0.0 (should return max density)
+        - Edge case: target_ratio = 1.0 (should return min density)
+        - Uniform density array (all values identical)
+        - Verify binary search convergence tolerance
         """
         ratios = [0.0, 0.1, 0.5, 0.7, 1]
 

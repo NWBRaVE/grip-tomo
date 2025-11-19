@@ -1,4 +1,4 @@
-# August George, 2022, PNNL
+# August George, 2025, PNNL
 
 import argparse
 import mrcfile
@@ -585,9 +585,9 @@ def voxel_coarsening(voxel_dim, point_cloud, labels, density=None, averaged=Fals
             )
         else:
             for coarse_point, raw_point in zip(coarsened_points, isolated_points):
-                dense_bins[
-                    coarse_point[0], coarse_point[1], coarse_point[2]
-                ] += raw_point
+                dense_bins[coarse_point[0], coarse_point[1], coarse_point[2]] += (
+                    raw_point
+                )
                 dense_bins_count[coarse_point[0], coarse_point[1], coarse_point[2]] += 1
         dense_bin_points = np.where(dense_bins_count > 0)
         coarsened_point_cloud = (
@@ -810,8 +810,37 @@ def add_Gaussian_noise(mrc, loc=0.0, scale=1.0):
     return D_w_noise
 
 
-# TODO: Add documentation for leave_2D_density
 def leave_2D_density(mrc_data, middle_z_index, xyz_data):
+    """
+    Extract a 2D slice from 3D density data at a specified z-index.
+
+    This function creates a binary mask of the original 3D density array,
+    preserving voxels at the specified z-index plane and zeroing all others.
+    Used for 2D projection analysis or slice-based feature extraction.
+
+    Parameters
+    ----------
+    mrc_data : numpy.ndarray
+        3D array of density values from MRC file.
+    middle_z_index : int
+        Z-axis index of the slice to preserve (0-based indexing).
+    xyz_data : numpy.ndarray
+        Nx3 array of [x, y, z] coordinates indicating voxels above threshold.
+
+    Returns
+    -------
+    numpy.ndarray
+        3D binary array with same shape as mrc_data, where voxels at
+        middle_z_index matching xyz_data coordinates are set to 1, all others 0.
+
+    Notes
+    -----
+    Primarily used for debugging or visualization of 2D slices from 3D volumes.
+    The function name may be misleading - it creates a binary mask rather than
+    extracting density values.
+
+    TODO: Consider renaming to `create_2D_slice_mask` for clarity.
+    """
     three_D_ndarray_left = np.zeros(
         (mrc_data.shape[0], mrc_data.shape[1], mrc_data.shape[2])
     )
@@ -866,7 +895,6 @@ def main(args):
 
 
 if __name__ == "__main__":
-
     # example: >> python density2graph.py fname.mrc 0.5 1 4 8
     parser = argparse.ArgumentParser()
     parser.add_argument(
